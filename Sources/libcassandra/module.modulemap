@@ -1,0 +1,5 @@
+module libcassandra {
+  header "shim.h"
+  link "libcassandra"
+  export *
+}

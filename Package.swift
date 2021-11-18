@@ -1,18 +1,20 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.5
 import PackageDescription
 
 let package = Package(
   name: "libcassandra",
   platforms: [
-    .macOS(.v11),
-    .iOS(.v14),
-    .watchOS(.v7),
-    .tvOS(.v14),
+    .macOS(.v12),
+    .iOS(.v15),
+    .watchOS(.v8),
+    .tvOS(.v15),
   ],
   products: [
+    .library(name: "CCassandra", targets: ["CCassandra"]),
     .library(name: "libcassandra", targets: ["libcassandra"]),
   ],
   targets: [
-    .binaryTarget(name: "libcassandra", path: "libcassandra.xcframework"),
+    .target(name: "CCassandra", dependencies: ["libcassandra"]),
+    .binaryTarget(name: "libcassandra", path: "Sources/libcassandra/libcassandra.xcframework"),
   ]
 )

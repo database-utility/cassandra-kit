@@ -30,7 +30,7 @@ public class CassandraSession {
   }
   
   /// Connects the session to the cluster.
-  public func connect() async throws {
+  public func connect() throws {
     connect_future = cass_session_connect(session, cluster)
     if cass_future_error_code(connect_future) != CASS_OK {
       var message_pointer: UnsafePointer<CChar>? = nil

@@ -1,0 +1,25 @@
+name: test
+on: [ push, pull_request ]
+
+jobs:
+  macos:
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        dbimage:
+          - cassandra
+          - cassandra@3
+          - cassandra@2.2
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v2
+    - name: Install Cassandra
+      run: |
+        export PATH="$(brew --prefix)/opt/${{ matrix.dbimage }}/bin:$PATH"
+        (brew unlink postgresql || true) && brew install ${{ matrix.dbimage }} && brew link --force ${{ matrix.dbimage }}
+        brew services start ${{ matrix.dbimage }}
+    - name: Build
+      run: swift build -v
+    - name: Test
+      run: swift test -v

@@ -68,7 +68,7 @@ xcodebuild -create-xcframework \
   -headers Build/cpp-driver/include \
   -library Build/cpp-driver/build-MACCOMBINED/Release/libcassandra_static.a \
   -headers Build/cpp-driver/include \
-  -output Sources/libcassandra/libcassandra.xcframework
+  -output libcassandra.xcframework
 
 #  -library Build/cpp-driver/build-SIMULATORARM64/Release/libcassandra_static.a \
 #  -headers Build/cpp-driver/include \

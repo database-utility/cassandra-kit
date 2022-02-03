@@ -2,43 +2,33 @@ import Foundation
 import CCassandraKit
 import OrderedCollections
 
-/// A Cassandra Session.
-@available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
+/// A Cassandra session.
+@available(macOS 11, iOS 15, tvOS 15, watchOS 8, *)
 public class CassandraSession {
-  var cluster: OpaquePointer
-  var session: OpaquePointer
+  var session = cass_session_new()
+  var cluster: CassandraCluster
   var connect_future: OpaquePointer!
   
-  /// Creates a new Cassandra session.
-  public init() {
-    cluster = cass_cluster_new()
-    // cass_cluster_set_connect_timeout(cluster, 2000)
-    cass_cluster_set_contact_points(cluster, "127.1")
-    // cass_cluster_set_application
-    // cass_cluster_set_port(cluster, port)
-    // cass_cluster_set_credentials(cluster, username.UTF8String, password.UTF8String)
-    cass_cluster_set_application_name(cluster, "CassandraKit")
-    cass_cluster_set_application_version(cluster, "1.0")
-    
-    session = cass_session_new()
+  /// Creates a new Cassandra session for the specified cluster.
+  public init(cluster: CassandraCluster) {
+    self.cluster = cluster
   }
   
   deinit {
     cass_future_free(connect_future)
-    cass_cluster_free(cluster)
     cass_session_free(session)
   }
   
   /// Connects the session to the cluster.
   public func connect() throws {
-    connect_future = cass_session_connect(session, cluster)
+    connect_future = cass_session_connect(session, cluster.cluster)
     if cass_future_error_code(connect_future) != CASS_OK {
       var message_pointer: UnsafePointer<CChar>? = nil
       var message_length: Int = 0
       let code = cass_future_error_code(connect_future)
       cass_future_error_message(connect_future, &message_pointer, &message_length)
       let message = String(cString: message_pointer!)
-      print("[CassandraClient] connect error: " + message)
+      //print("[CassandraClient] connect error: " + message)
       throw CassandraError(code: code, message: message)
     }
   }
@@ -161,8 +151,8 @@ public class CassandraSession {
             var type_name_length: Int = 0
             // cass_column_meta_type_name(column_meta, &type_name_pointer, &type_name_length)
             cass_data_type_type_name(column_data_type, &type_name_pointer, &type_name_length)
-            let type_name = String(cString: type_name_pointer!)
-            //            print(type_name)
+            let _ = String(cString: type_name_pointer!)
+            // print(type_name)
             
           case .tuple:
             cass_iterator_from_tuple(column)

@@ -4,7 +4,7 @@ import PackageDescription
 let package = Package(
   name: "cassandra-kit",
   platforms: [
-    .macOS(.v12),
+    .macOS(.v11),
     .iOS(.v15),
     .tvOS(.v15),
     .watchOS(.v8),
@@ -18,32 +18,17 @@ let package = Package(
   targets: [
     .target(
       name: "CassandraKit",
-      dependencies: [
-        "CCassandraKit",
-        .product(name: "OrderedCollections", package: "swift-collections"),
-      ]
-    ),
-    .testTarget(
-      name: "CassandraKitTests",
-      dependencies: ["CassandraKit"]
+      dependencies: ["CCassandraKit", .product(name: "OrderedCollections", package: "swift-collections")]
     ),
     .target(
       name: "CCassandraKit",
-      dependencies: ["libcassandra"],
-      linkerSettings: [
-        .unsafeFlags([
-          "-L/usr/local/opt/openssl/lib",
-          "-L/usr/local/opt/libuv/lib"
-        ]),
-        .linkedLibrary("ssl"),
-        .linkedLibrary("crypto"),
-        .linkedLibrary("z"),
-        .linkedLibrary("uv"),
-      ]
+      dependencies: ["libcassandra", "libcrypto", "libssl", "libuv", "libz"]
     ),
-    .binaryTarget(
-      name: "libcassandra",
-      path: "libcassandra.xcframework"
-    ),
+    .binaryTarget(name: "libcassandra", path: "libcassandra.xcframework"),
+    .binaryTarget(name: "libcrypto", path: "libcrypto.xcframework"),
+    .binaryTarget(name: "libssl", path: "libssl.xcframework"),
+    .binaryTarget(name: "libuv", path: "libuv.xcframework"),
+    .binaryTarget(name: "libz", path: "libz.xcframework"),
+    .testTarget(name: "CassandraKitTests", dependencies: ["CassandraKit"]),
   ]
 )

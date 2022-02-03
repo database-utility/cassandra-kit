@@ -2,8 +2,30 @@
 
 Apache Cassandra client library for Apple platforms.
 
-## `libcassandra.xcframework`
 
-`libcassandra` from [DataStax C/C++ Driver](https://docs.datastax.com/en/developer/cpp-driver/2.16/) as an XCFramework.
+## Installation
 
-Tested with CMake 3.21.4.
+```swift
+.package(url: "https://github.com/database-utility/cassandra-kit.git", branch: "main")
+```
+
+```swift
+import CassandraKit
+```
+
+
+## Usage
+
+```swift
+let session = CassandraSession(cluster: CassandraCluster(url: "cassandra://localhost"))
+try session.connect()
+
+let keyspaces = try session.execute("select * from system_schema.keyspaces")
+print(keyspaces as NSArray)
+```
+
+
+## Acknowledgements
+
+Uses [DataStax C/C++ Driver](https://docs.datastax.com/en/developer/cpp-driver/2.16/).
+

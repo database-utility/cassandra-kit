@@ -2,24 +2,30 @@ name: test
 on: [ push, pull_request ]
 
 jobs:
-  macos:
+  test:
     runs-on: macos-latest
     strategy:
       fail-fast: false
       matrix:
         dbimage:
           - cassandra
-          - cassandra@3
-          - cassandra@2.2
+          # TODO: add these:
+          # - cassandra@3
+          # - cassandra@2.2
+        destination:
+          - macOS
+          - iOS Simulator,name=iPhone 13
+          - tvOS Simulator,name=Apple TV
+          - watchOS Simulator,name=Apple Watch Series 7 - 45mm
     steps:
     - name: Check out repository
       uses: actions/checkout@v2
     - name: Install Cassandra
       run: |
         export PATH="$(brew --prefix)/opt/${{ matrix.dbimage }}/bin:$PATH"
-        (brew unlink postgresql || true) && brew install ${{ matrix.dbimage }} && brew link --force ${{ matrix.dbimage }}
+        (brew unlink cassandra || true) && brew install ${{ matrix.dbimage }} && brew link --force ${{ matrix.dbimage }}
         brew services start ${{ matrix.dbimage }}
     - name: Build
-      run: swift build -v
+      run: xcodebuild build -scheme cassandra-kit -destination 'platform=${{ matrix.destination }}'
     - name: Test
-      run: swift test -v
+      run: xcodebuild test -scheme cassandra-kit -destination 'platform=${{ matrix.destination }}'

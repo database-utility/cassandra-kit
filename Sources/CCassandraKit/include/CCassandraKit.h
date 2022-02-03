@@ -1,6 +1,7 @@
-#ifndef libcassandra_shim_h
-#define libcassandra_shim_h
+#ifndef CCassandraKit_h
+#define CCassandraKit_h
 
 #import <cassandra.h>
+#import <cassandra-constants.hpp>
 
 #endif

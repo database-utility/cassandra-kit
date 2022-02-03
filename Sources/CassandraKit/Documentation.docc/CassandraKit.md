@@ -6,6 +6,7 @@ Apache Cassandra client library for Apple platforms.
 
 ### Connecting to Cassandra
 
+- ``CassandraCluster``
 - ``CassandraSession``
 
 ### Handling Errors

@@ -8,21 +8,19 @@ git clone https://github.com/datastax/cpp-driver.git
 
 # FIXME: `WATCHOS` doesn’t seem to work; using `WATCHOSCOMBINED` for now instead
 # FIXME: `SIMULATORARM64` doesn’t seem to work
+#platforms=(MAC)
 platforms=(
+  OS64
+  SIMULATOR64
+  TVOS
+  SIMULATOR_TVOS
+  WATCHOSCOMBINED
   SIMULATOR_WATCHOS
+  MAC
+  MAC_ARM64
+  MAC_CATALYST
+  MAC_CATALYST_ARM64
 )
-#platforms=(
-#  OS64
-#  SIMULATOR64
-#  TVOS
-#  SIMULATOR_TVOS
-#  WATCHOSCOMBINED
-#  SIMULATOR_WATCHOS
-#  MAC
-#  MAC_ARM64
-#  MAC_CATALYST
-#  MAC_CATALYST_ARM64
-#)
 
 # FIXME: `COMBINED` doesn’t seem to work; only produces fat files sometimes 🥴
 #platforms=(
@@ -39,7 +37,7 @@ git apply ../../CMakeLists.patch
 for platform in ${platforms[@]}; do
   mkdir -p "build-$platform"
   pushd "build-$platform"
-  cmake .. -G Xcode -DCMAKE_TOOLCHAIN_FILE=../../ios-cmake/ios.toolchain.cmake -DPLATFORM=$platform
+  cmake .. -G Xcode -DCMAKE_TOOLCHAIN_FILE=../../ios-cmake/ios.toolchain.cmake -DPLATFORM=$platform -DCMAKE_XCODE_ATTRIBUTE_MACOSX_DEPLOYMENT_TARGET=11.0
   cmake --build . --config Release
   # cmake --install . --config Release
   popd

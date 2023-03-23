@@ -1,6 +1,6 @@
-# CassandraKit
+# CassandraKit (🚧 Work in Progress 🚧)
 
-Apache Cassandra client library for Apple platforms.
+Proof of concept prototype of an Apache Cassandra client library for Apple platforms.
 
 
 ## Installation
